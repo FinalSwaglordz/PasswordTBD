@@ -63,15 +63,15 @@ void* second_thread( void* args)
 
 	char *input_string = damon -> data;
 
-	int n2 = 5;
 
-	char *c_first_thread = new char[((n2+1)*sizeof(char))];
+	int i, j, n = damon -> length;
+	char *c_first_thread = new char[((n+1)*sizeof(char))];
 
-	int i, j;
+	
 
 	printf("The second thread is looking for: %s\n", input_string);
 
-	for( i=n2;i<=n2;i++)
+	for( i=n;i<=n;i++)
 	{
        		for( j=0;j<i;j++) 
 		{		
@@ -107,17 +107,18 @@ void* first_thread( void* args)
 	struct damonArray *damon = (struct damonArray*) args;
 
 	char *input_string = damon -> data;
+	
+	int i,j, n = damon -> length;
 
-	int n1 = 5;
-	char *c_first_thread = new char[((n1+1)*sizeof(char))];
+	char *c_first_thread = new char[((n+1)*sizeof(char))];
 	//long serialStartTimer = start_timer();
-	int i,j;
+	
 
 	printf("The first thread is looking for: %s\n", input_string);
 
 
 
-		for( i=1;i<=(n1-1);i++)
+		for( i=1;i<=(n-1);i++)
 		{
        			for( j=0;j<i;j++) 
 			{		

@@ -106,7 +106,7 @@ void* second_thread(void*args)
 		c_second_thread[i]=0;
 		do 
 		{
-			printf("2: %s\n",c_second_thread);       			
+			//printf("2: %s\n",c_second_thread);       			
 			if(strcmp(input_string, c_second_thread) == 0)
 			{
 				printf("Thread 2 has determined that you entered: %s\n", c_second_thread);
@@ -139,14 +139,15 @@ void* first_thread( void* args)
 {
 
 	struct damonArray *damon = (struct damonArray*) args;
-
 	char *input_string = damon -> data;
-	
 	int i,j,k,n = damon -> length;
 	char *c_first_thread = new char[((n+1)*sizeof(char))];
 
 	printf("The first thread is looking for: %s\n", input_string);
 	
+	
+
+
 	for( i=1;i<=n;i++)
 	{
 		
@@ -156,7 +157,7 @@ void* first_thread( void* args)
 		{
 			end[k] = 'z';
 		}
-		end[n-1] = 'm';
+		end[k] = 'm';
 
 
 		for( j=0;j<i;j++) 
@@ -167,7 +168,7 @@ void* first_thread( void* args)
 		do 
 		{
        			
-			printf("1: %s\n",c_first_thread);
+			//printf("1: %s\n",c_first_thread);
 			if(strcmp(input_string, c_first_thread) == 0)
 			{
 				printf("Thread 1 has determined that you entered: %s\n", c_first_thread);
