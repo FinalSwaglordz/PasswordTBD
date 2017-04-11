@@ -8,12 +8,41 @@ using namespace std;
 #include <cstdlib>
 #include <unistd.h>
 #include <string.h>
+#include <sys/time.h>
+#include <math.h>
+#include <iomanip>
+
+
+
+struct damonArray
+{
+	char * data;
+	int length;
+
+};
+
+long long start_timer() {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return tv.tv_sec * 1000000 + tv.tv_usec;
+}
+
+
+// Prints the time elapsed since the specified time
+long long stop_timer(long long start_time, std::string name) {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	long long end_time = tv.tv_sec * 1000000 + tv.tv_usec;
+        std::cout << std::setprecision(5);	
+	std::cout << name << ": " << ((float) (end_time - start_time)) / (1000 * 1000) << " sec\n";
+	return end_time - start_time;
+}
 
 
 int inc(char *c){
     if(c[0]==0) return 0;
     if(c[0]=='z')
-	{
+    {
         c[0]='0';
         return inc(c+sizeof(char));
     }   
@@ -22,86 +51,95 @@ int inc(char *c){
 }
 
 
-int first_thread(void * args)
+void* second_thread( void* args)
 {
 
-char **input_string =(char**) args;
+	struct damonArray *damon = (struct damonArray*) args;
 
-int n1 = 5;
-char *c_first_thread = new char[((n1+1)*sizeof(char))];
+	char *input_string = damon -> data;
 
-int i,j;
+	int n2 = 5;
 
-for( i=1;i<=(n1-1);i++){
-        for( j=0;j<i;j++) 
+	char *c_first_thread = new char[((n2+1)*sizeof(char))];
+
+	int i, j;
+
+	printf("input_string: %s\n", input_string);
+
+	for( i=n2;i<=n2;i++)
+	{
+       		for( j=0;j<i;j++) 
 		{		
 			c_first_thread[j]='0';
 		}
-    	c_first_thread[i]=0;
-    	do 
-		{
-       		
-			
-			if(strcmp(input_string, c_first_thread) == 0)
+    			c_first_thread[i]=0;
+    			do 
 			{
-				printf("The program has determined that you entered: %s\n", c_first_thread);
-				//ong serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
-				free(c_first_thread);				
-				return 0;	
-			}
+       				if(strcmp(input_string, c_first_thread) == 0)
+				{
+					printf("The program has determined that you entered: %s\n", c_first_thread);
+					//long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
+				
+					free(c_first_thread);				
+					return damon;	
+				}
 			
 			
-			//printf("%s\n",c);
+			//printf("%s\n",c_first_thread);
 
-    	} 
-		while(inc(c_first_thread));    
+    			} 
+			while(inc(c_first_thread));    
 	}
-
-
 
 }
 
-int second_thread(void * args)
+
+void* first_thread( void* args)
 {
 
-int n2 = 5;
-char *c_second_thread = new char[((n2+1)*sizeof(char))];
-int i,j;
+	struct damonArray *damon = (struct damonArray*) args;
 
-char **input_string =(char**) args;
+	char *input_string = damon -> data;
 
-	for(i = 0; i < n2; i++)
-	{
-	c_second_thread[i]= '0';
-	}
+	int n1 = 5;
+	char *c_first_thread = new char[((n1+1)*sizeof(char))];
+	//long serialStartTimer = start_timer();
+	int i,j;
+
+	printf("input_string: %s\n", input_string);
 
 
 
-       
-    	c_second_thread[5]=0;
-    	do 
+		for( i=1;i<=(n1-1);i++)
 		{
-       		
-			
-			if(strcmp(input_string, c_second_thread) == 0)
-			{
-				printf("The program has determined that you entered: %s\n", c_second_thread);
-				//long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
-				free(c_second_thread);				
-				return 0;	
+       			for( j=0;j<i;j++) 
+			{		
+				c_first_thread[j]='0';
 			}
+    			c_first_thread[i]=0;
+    			do 
+			{
+       				if(strcmp(input_string, c_first_thread) == 0)
+				{
+					printf("The program has determined that you entered: %s\n", c_first_thread);
+					//long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
+				
+					free(c_first_thread);				
+					return damon;	
+				}
 			
 			
-			//printf("%s\n",c);
+			//printf("%s\n",c_first_thread);
 
-    	} 
-		while(inc(c_second_thread));    
+    			} 
+			while(inc(c_first_thread));    
+		}
+
+	printf("first thread did not find input\n");
 }
 
 
-
-
-int main( int argc, char* argv )
+int main( int argc, char ** argv )
 {
 
 	if(argc != 2)
@@ -117,14 +155,23 @@ int main( int argc, char* argv )
 	char input_string[len];
 	strcpy(input_string,argv[1]);
 
+	struct damonArray damon;
+	damon.data = input_string;
+	damon.length = len;
+
 	printf("The string you entered was: %s\n", input_string);
 
 	
 
-
-	int x,y;
+	long serialStartTimer = start_timer();
+	
 	pthread_t thread1,thread2;
-	pthread_create(&thread1,NULL,first_thread,  input_string);
-	pthread_create(&thread2,NULL,second_thread, input_string);
+	pthread_create(&thread1, NULL , first_thread, &damon);
+	pthread_create(&thread2, NULL , second_thread, &damon);
+
+	pthread_join(thread1, NULL);
+	pthread_join(thread2, NULL);
+
+	long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
 
 }
