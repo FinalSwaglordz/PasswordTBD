@@ -14,6 +14,9 @@ using namespace std;
 
 
 
+int thread1_active;
+int thread2_active;
+
 struct damonArray
 {
 	char * data;
@@ -64,7 +67,7 @@ void* second_thread( void* args)
 
 	int i, j;
 
-	printf("input_string: %s\n", input_string);
+	printf("The second thread is looking for: %s\n", input_string);
 
 	for( i=n2;i<=n2;i++)
 	{
@@ -80,7 +83,8 @@ void* second_thread( void* args)
 					printf("The program has determined that you entered: %s\n", c_first_thread);
 					//long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
 				
-					free(c_first_thread);				
+					free(c_first_thread);
+					thread2_active = 0;				
 					return damon;	
 				}
 			
@@ -88,9 +92,10 @@ void* second_thread( void* args)
 			//printf("%s\n",c_first_thread);
 
     			} 
-			while(inc(c_first_thread));    
+			while(inc(c_first_thread));
 	}
-
+	printf("The second thread did not find the string\n");
+	thread2_active = 0;
 }
 
 
@@ -106,7 +111,7 @@ void* first_thread( void* args)
 	//long serialStartTimer = start_timer();
 	int i,j;
 
-	printf("input_string: %s\n", input_string);
+	printf("The first thread is looking for: %s\n", input_string);
 
 
 
@@ -124,7 +129,8 @@ void* first_thread( void* args)
 					printf("The program has determined that you entered: %s\n", c_first_thread);
 					//long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
 				
-					free(c_first_thread);				
+					free(c_first_thread);	
+					thread1_active = 0;			
 					return damon;	
 				}
 			
@@ -135,7 +141,8 @@ void* first_thread( void* args)
 			while(inc(c_first_thread));    
 		}
 
-	printf("first thread did not find input\n");
+	printf("The first thread did not find: %s\n", input_string);
+	thread1_active = 0;
 }
 
 
@@ -159,18 +166,33 @@ int main( int argc, char ** argv )
 	damon.data = input_string;
 	damon.length = len;
 
-	printf("The string you entered was: %s\n", input_string);
+	printf("\nThe string you entered was: %s\n", input_string);
 
 	
 
 	long serialStartTimer = start_timer();
 	
+
+	thread1_active = 1;
+	thread2_active = 1;
 	pthread_t thread1,thread2;
 	pthread_create(&thread1, NULL , first_thread, &damon);
 	pthread_create(&thread2, NULL , second_thread, &damon);
-
-	pthread_join(thread1, NULL);
-	pthread_join(thread2, NULL);
+	
+	while(thread1_active || thread2_active)
+	{
+		sleep(2);
+		printf("here\n");
+	}
+	
+	printf("done\n");
+	/*
+	pthread_cancel(thread1);
+	pthread_cancel(thread2);
+	*/
+	
+	//pthread_join(thread1, NULL);
+	//pthread_join(thread2, NULL);
 
 	long serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
 
