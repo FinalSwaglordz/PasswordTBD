@@ -1,3 +1,5 @@
+
+//Imported Packages, not sure if they all are needed :/
 #include <pthread.h>
 #include <iostream>
 #include <fstream>
@@ -14,12 +16,17 @@ using namespace std;
 
 
 
+/*
+global varibles to check if the threads are active or if either thread
+found the input.
+*/
 int thread1_active;
 int thread2_active;
 int thread1_found;
 int thread2_found;
 
 
+//A struct I made to pass multiple arguments into pthread_create
 struct damonArray
 {
 	char * data;
@@ -27,12 +34,14 @@ struct damonArray
 
 };
 
+/*
+Timing methods
+*/
 long long start_timer() {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	return tv.tv_sec * 1000000 + tv.tv_usec;
 }
-
 long long stop_timer(long long start_time, std::string name) {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -43,32 +52,30 @@ long long stop_timer(long long start_time, std::string name) {
 }
 
 
-int inc_second(char *c)
+/*
+Incrementing method to iterate from one string to the next.
+Can be used by any number of threads, assuming the threads are all initialized to their the beginning of their respective character spaces and themselves provide the checks to stop at the end of their character space
+*/
+
+int inc(char *c)
 {
 	
     if(c[0]==0) return 0;
     if(c[0]=='z')
     {
         c[0]='a';
-        return inc_second(c+sizeof(char));
+        return inc(c+sizeof(char));
     }   
     c[0]++;
     return 1;
 
 }
 
-
-int inc_first(char *c){
-    if(c[0]==0) return 0;
-    if(c[0]=='z')
-    {
-        c[0]='a';
-        return inc_first(c+sizeof(char));
-    }   
-    c[0]++;
-    return 1;
-}
-
+/*
+Method for the second thread.  
+Searches the characer space aaa....an (n being the letter, not the length of the input)
+For example, for input length 4, this thread would search (n-z), (an-zz), (aan-zzz), (aaan-zzzz)
+*/
 void* second_thread(void*args)
 {
 
@@ -90,6 +97,7 @@ void* second_thread(void*args)
 			c_second_thread[j]='a';
 		}
 		*/
+		printf("2: Checking Length %i\n", i);		
 		c_second_thread[i-1] = 'n';
 		for( j=0; j< n-2; j++)
 		{
@@ -98,7 +106,7 @@ void* second_thread(void*args)
 		c_second_thread[i]=0;
 		do 
 		{
-			//printf("2: %s\n",c_second_thread);       			
+			printf("2: %s\n",c_second_thread);       			
 			if(strcmp(input_string, c_second_thread) == 0)
 			{
 				printf("Thread 2 has determined that you entered: %s\n", c_second_thread);
@@ -113,16 +121,19 @@ void* second_thread(void*args)
 			
 
     		} 
-		while(inc_second(c_second_thread));    
+		while(inc(c_second_thread));    
 
 	}
 	printf("The second thread did not find: %s\n", input_string);
 	thread2_active = 0;
 }
 
-
-
-
+/*
+Method for the first thread.  
+Searches the characer space (aaaa....-zzzzm)
+For example, for input length 4, this thread would search (a-z), (aa-zm), (aaa-zzm), (aaaa-zzzm)
+**Notice, there is some slight overlap between the threads, specifically (n-z) gets done twice, but I mean come-on, its one set of like 13 letters. Its no big deal.  It doesn't manifest into the longer length inputs.
+*/
 
 void* first_thread( void* args)
 {
@@ -139,6 +150,7 @@ void* first_thread( void* args)
 	for( i=1;i<=n;i++)
 	{
 		
+		printf("1: Checking Length %i\n", i);		
 		char * end = new char[((i+1)*sizeof(char))];
 		for( k = 0; k<(i-1); k++)
 		{
@@ -155,7 +167,7 @@ void* first_thread( void* args)
 		do 
 		{
        			
-			//printf("1: %s\n",c_first_thread);
+			printf("1: %s\n",c_first_thread);
 			if(strcmp(input_string, c_first_thread) == 0)
 			{
 				printf("Thread 1 has determined that you entered: %s\n", c_first_thread);
@@ -177,7 +189,7 @@ void* first_thread( void* args)
 			
 
     		} 
-		while(inc_first(c_first_thread));    
+		while(inc(c_first_thread));    
 
 	}
 	printf("The first thread did not find: %s\n", input_string);
@@ -256,6 +268,12 @@ int main( int argc, char ** argv)
 
 	long serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
 
+	if(thread1_found == 0 && thread2_found == 0)
+	{
+		printf("Input could not be found.  Are you sure you entered valid input?\n");
+		printf("Character Alphabet for this version: ASCII 'a'-'z'\n");
+	}
+	
 	printf("EXITING\n\n");
 
 }
