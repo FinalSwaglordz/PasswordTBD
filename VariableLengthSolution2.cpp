@@ -13,6 +13,13 @@ using namespace std;
 #include <iomanip>
 
 
+
+int thread1_active;
+int thread2_active;
+int thread1_found;
+int thread2_found;
+
+
 struct damonArray
 {
 	char * data;
@@ -35,7 +42,34 @@ long long stop_timer(long long start_time, std::string name) {
 	return end_time - start_time;
 }
 
-void* first_thread( void* args)
+
+int inc_second(char *c)
+{
+	
+    if(c[0]==0) return 0;
+    if(c[0]=='z')
+    {
+        c[0]='a';
+        return inc_second(c+sizeof(char));
+    }   
+    c[0]++;
+    return 1;
+
+}
+
+
+int inc_first(char *c){
+    if(c[0]==0) return 0;
+    if(c[0]=='z')
+    {
+        c[0]='a';
+        return inc_first(c+sizeof(char));
+    }   
+    c[0]++;
+    return 1;
+}
+
+void* second_thread(void*args)
 {
 
 	struct damonArray *damon = (struct damonArray*) args;
@@ -43,20 +77,111 @@ void* first_thread( void* args)
 	char *input_string = damon -> data;
 	
 	int i,j,n = damon -> length;
+
+	char *c_second_thread = new char[((n+1)*sizeof(char))];
+
+	printf("The second thread is looking for: %s\n", input_string);
+
+	for( i=1;i<=n;i++)
+	{
+		/*
+		for( j=0;j<i;j++) 
+		{		
+			c_second_thread[j]='a';
+		}
+		*/
+		c_second_thread[i-1] = 'n';
+		for( j=0; j< n-2; j++)
+		{
+			c_second_thread[j]='a';
+		}
+		c_second_thread[i]=0;
+		do 
+		{
+			//printf("2: %s\n",c_second_thread);       			
+			if(strcmp(input_string, c_second_thread) == 0)
+			{
+				printf("Thread 2 has determined that you entered: %s\n", c_second_thread);
+				thread2_found = 1;	
+				
+				free(c_second_thread);	
+							
+				return damon;	
+			}
+			
+			
+			
+
+    		} 
+		while(inc_second(c_second_thread));    
+
+	}
+	printf("The second thread did not find: %s\n", input_string);
+	thread2_active = 0;
+}
+
+
+
+
+
+void* first_thread( void* args)
+{
+
+	struct damonArray *damon = (struct damonArray*) args;
+
+	char *input_string = damon -> data;
+	
+	int i,j,k,n = damon -> length;
 	char *c_first_thread = new char[((n+1)*sizeof(char))];
 
-	printf("input_string: %s\n", input_string);
+	printf("The first thread is looking for: %s\n", input_string);
 	
 	for( i=1;i<=n;i++)
 	{
+		
+		char * end = new char[((i+1)*sizeof(char))];
+		for( k = 0; k<(i-1); k++)
+		{
+			end[k] = 'z';
+		}
+		end[n-1] = 'm';
+
+
 		for( j=0;j<i;j++) 
 		{		
-			c_first_thread[j]='0';
+			c_first_thread[j]='a';
 		}
+		c_first_thread[i]=0;
+		do 
+		{
+       			
+			//printf("1: %s\n",c_first_thread);
+			if(strcmp(input_string, c_first_thread) == 0)
+			{
+				printf("Thread 1 has determined that you entered: %s\n", c_first_thread);
+				thread1_found = 1;	
+				
+				free(c_first_thread);	
+							
+				return damon;	
+			}
+			
+			if(strcmp(c_first_thread, end) == 0)
+			{
+								
+				break;
+			}
+			
+			
+			//printf("end: %s\n", end);
+			
 
+    		} 
+		while(inc_first(c_first_thread));    
 
 	}
-
+	printf("The first thread did not find: %s\n", input_string);
+	thread1_active = 0;
 
 }
 
@@ -81,11 +206,57 @@ int main( int argc, char ** argv)
 	damon.data = input_string;
 	damon.length = len;
 
-	printf("The string you entered was: %s\n", input_string);
+	printf("\nThe string you entered was: %s\n", input_string);
+
+	long serialStartTimer = start_timer();
+
+	thread1_active = 1;
+	thread2_active = 1;
+	thread1_found = 0;
+	thread2_found = 0;
+
+
+	pthread_t thread1,thread2;
+	pthread_create(&thread1, NULL , first_thread, &damon);
+	pthread_create(&thread2, NULL , second_thread, &damon);
+
+	int exit = 1;
+
+	do
+	{
+		if(thread1_active == 0 && thread2_active == 0)
+		{
+			exit = 0;
+		}
+		if(thread1_found)
+		{
+			exit = 0;
+		}
+		if(thread2_found)
+		{
+			exit = 0;
+		}
+		
+		usleep(50000);
+
+	}
+	while(exit);
+	
+	if(thread1_active)
+	{
+		pthread_cancel(thread1);
+	}
+	if(thread2_active)
+	{
+		pthread_cancel(thread2);
+	}
+	
 
 	
 
+	long serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
 
+	printf("EXITING\n\n");
 
 }
 

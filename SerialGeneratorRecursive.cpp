@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -32,7 +30,7 @@ int inc(char *c){
     if(c[0]==0) return 0;
     if(c[0]=='z')
 	{
-        c[0]='0';
+        c[0]='a';
         return inc(c+sizeof(char));
     }   
     c[0]++;
@@ -55,17 +53,20 @@ int main(int argc, char* argv[])
 	strcpy(input_string,argv[1]);
 	
 
-    int n = 5;
+    int n = len;
     int i,j;
     char *c = new char[((n+1)*sizeof(char))];
 	printf("The string you entered was: %s\n", input_string);
 	//char set[] = {'a','b','c'};
 		
 	//i is index that keeps track of length.
-	for(i=1;i<=n;i++){
+	for(i=1;i<=n;i++)
+	{
+
+	printf("Checking Length %i\n", i);
         for(j=0;j<i;j++) 
 		{		
-			c[j]='0';
+			c[j]='a';
 		}
     	c[i]=0;
     	do 
