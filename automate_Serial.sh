@@ -1,0 +1,19 @@
+#!/bin/bash
+./Serial a;
+./Serial aa;
+./Serial aaa;
+./Serial aaaa;
+./Serial aaaaa;
+./Serial aaaaaa;
+./Serial z;
+./Serial zz;
+./Serial zzz;
+./Serial zzzz;
+./Serial zzzzz;
+./Serial zzzzzz;
+./Serial p;
+./Serial pp;
+./Serial ppp;
+./Serial pppp;
+./Serial ppppp;
+./Serial pppppp;

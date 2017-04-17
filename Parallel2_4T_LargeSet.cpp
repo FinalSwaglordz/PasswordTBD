@@ -12,9 +12,6 @@ using namespace std;
 #include <sys/time.h>
 #include <math.h>
 #include <iomanip>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
 int thread1_active;
 int thread2_active;
@@ -25,31 +22,12 @@ int thread2_found;
 int thread3_found;
 int thread4_found;
 
-long serialStartTimer;
-long serialStopTimer;
-long serialCheckTimer;
-
-ofstream personalOutputFile;
-ofstream totalOutputFile;
-
-int minutes = 0;
-int quit = 0;
-
-int show1 = 0;
-int show2 = 0;
-int show3 = 0;
-int show4 = 0;
-
-int wait_Time = 999999;
-
 struct damonArray
 {
 	char * data;
 	int length;
 
 };
-
-
 
 /*
 Timing methods
@@ -63,29 +41,9 @@ long long stop_timer(long long start_time, std::string name) {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	long long end_time = tv.tv_sec * 1000000 + tv.tv_usec;
-        std::cout << std::setprecision(7);	
+        std::cout << std::setprecision(5);	
 	std::cout << name << ": " << ((float) (end_time - start_time)) / (1000 * 1000) << " sec\n";
 	return end_time - start_time;
-}
-
-long long check_timer(long long start_time, std::string name){
-
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	long long check_time = tv.tv_sec * 1000000 + tv.tv_usec;
-	return (check_time - start_time)/1000000;
-
-}
-
-
-
-/* Signal Handler for SIGINT */
-void sigintHandler(int sig_num)
-{
-	
-	printf("\nYou cancelled the search\n");
-	serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
-	quit = 1;
 }
 
 int inc(char *c)
@@ -94,7 +52,7 @@ int inc(char *c)
     if(c[0]==0) return 0;
     if(c[0]=='z')
     {
-        c[0]='a';
+        c[0]='0';
         return inc(c+sizeof(char));
     }   
     c[0]++;
@@ -122,12 +80,12 @@ void* method1( void* args)
 		{
 			end[k] = 'z';
 		}
-		end[k] = 'g';
+		end[k] = 'C';
 
 
 		for( j=0;j<i;j++) 
 		{		
-			c_first_thread[j]='a';
+			c_first_thread[j]='0';
 		}
 		c_first_thread[i]=0;
 		do 
@@ -137,10 +95,7 @@ void* method1( void* args)
 			if(strcmp(input_string, c_first_thread) == 0)
 			{
 				printf("Thread 1 has determined that you entered: %s\n", c_first_thread);
-				personalOutputFile << c_first_thread;
-				totalOutputFile << c_first_thread;
-
-				thread1_found = 1;
+				thread1_found = 1;	
 				
 				free(c_first_thread);	
 							
@@ -151,12 +106,6 @@ void* method1( void* args)
 			{
 								
 				break;
-			}
-
-			if(show1)
-			{
-				printf("Last checked by Thread 1: %s\n", c_first_thread);
-				show1 = 0;
 			}
 			
 			
@@ -198,11 +147,11 @@ void* method2(void*args)
 		{
 			end[k] = 'z';
 		}
-		end[k] = 'n';
+		end[k] = 'V';
 
 
 
-		c_second_thread[i-1] = 'h';
+		c_second_thread[i-1] = 'D';
 		for( j=0; j< i-1; j++)
 		{
 			c_second_thread[j]='a';
@@ -214,10 +163,6 @@ void* method2(void*args)
 			if(strcmp(input_string, c_second_thread) == 0)
 			{
 				printf("Thread 2 has determined that you entered: %s\n", c_second_thread);
-				personalOutputFile << c_second_thread;
-				totalOutputFile << c_second_thread;
-
-
 				thread2_found = 1;	
 				
 				free(c_second_thread);	
@@ -229,12 +174,6 @@ void* method2(void*args)
 			{
 								
 				break;
-			}
-
-			if(show2)
-			{
-				printf("Last checked by Thread 2: %s\n", c_second_thread);
-				show2 = 0;
 			}
 			
 			
@@ -274,11 +213,11 @@ void* method3(void*args)
 		{
 			end[k] = 'z';
 		}
-		end[k] = 't';
+		end[k] = 'h';
 
 
 
-		c_third_thread[i-1] = 'o';
+		c_third_thread[i-1] = 'W';
 		for( j=0; j< (i-1); j++)
 		{
 			c_third_thread[j]='a';
@@ -290,10 +229,6 @@ void* method3(void*args)
 			if(strcmp(input_string, c_third_thread) == 0)
 			{
 				printf("Thread 3 has determined that you entered: %s\n", c_third_thread);
-				personalOutputFile << c_third_thread;
-				totalOutputFile << c_third_thread;
-
-
 				thread3_found = 1;	
 				
 				free(c_third_thread);	
@@ -305,12 +240,6 @@ void* method3(void*args)
 			{
 								
 				break;
-			}
-
-			if(show3)
-			{
-				printf("Last checked by Thread 3: %s\n", c_third_thread);
-				show3 = 0;
 			}
 			
 			
@@ -354,7 +283,7 @@ void* method4(void*args)
 		*/
 
 
-		c_fourth_thread[i-1] = 'u';
+		c_fourth_thread[i-1] = 'i';
 		for( j=0; j< i-1; j++)
 		{
 			c_fourth_thread[j]='a';
@@ -366,9 +295,6 @@ void* method4(void*args)
 			if(strcmp(input_string, c_fourth_thread) == 0)
 			{
 				printf("Thread 4 has determined that you entered: %s\n", c_fourth_thread);
-				personalOutputFile << c_fourth_thread;
-				totalOutputFile << c_fourth_thread;
-
 				thread4_found = 1;	
 				
 				free(c_fourth_thread);	
@@ -381,16 +307,8 @@ void* method4(void*args)
 								
 				break;
 			}
-
-			
 			
 		*/	
-
-			if(show4)
-			{
-				printf("Last checked by Thread 4: %s\n", c_fourth_thread);
-				show4 = 0;
-			}
 			
 
     		} 
@@ -413,169 +331,97 @@ int main( int argc, char ** argv)
 
 	}
 
-	mkdir("OutputFiles", ACCESSPERMS);
-	printf("Output Directory: OutputFiles\n");
-
-	signal(SIGINT, sigintHandler);
 
 	int len = strlen(argv[1]);
 	char input_string[len];
-		
-	
-	if(len > 9)
+	strcpy(input_string,argv[1]);
+
+	struct damonArray damon;
+	damon.data = input_string;
+	damon.length = len;
+
+	printf("\nThe string you entered was: %s\n", input_string);
+
+	long serialStartTimer = start_timer();
+
+	thread1_active = 1;
+	thread2_active = 1;
+	thread3_active = 1;
+	thread4_active = 1;
+
+	thread1_found = 0;
+	thread2_found = 0;
+	thread3_found = 0;
+	thread4_found = 0;
+
+
+
+	pthread_t thread1,thread2,thread3,thread4;
+	pthread_create(&thread1, NULL , method1, &damon);
+	pthread_create(&thread2, NULL , method2, &damon);
+	pthread_create(&thread3, NULL , method3, &damon);
+	pthread_create(&thread4, NULL , method4, &damon);
+
+	int exit = 1;
+
+	do
 	{
-		printf("I'm assuming you made a mistake.\n");
-		printf("String is pretty long, better change programs to look for that one.\n\n");
+		if(thread1_active == 0 && thread2_active == 0 && thread3_active == 0 && thread4_active == 0)
+		{
+			exit = 0;
+		}
+		if(thread1_found)
+		{
+			exit = 0;
+		}
+		if(thread2_found)
+		{
+			exit = 0;
+		}
+		if(thread3_found)
+		{
+			exit = 0;
+		}
+		if(thread4_found)
+		{
+			exit = 0;
+		}
 		
+		usleep(10000);
+
 	}
-	else
+	while(exit);
+	
+	if(thread1_active)
 	{
-		strcpy(input_string,argv[1]);
-
-		struct damonArray damon;
-		damon.data = input_string;
-		damon.length = len;
-
-		personalOutputFile.open("OutputFiles/Parallel2_4T_Output.csv", std::ios_base::app);
-		totalOutputFile.open("OutputFiles/Final_Project_Total_Data.csv", std::ios_base::app);
-		
-		totalOutputFile << "Parallel2_4T,";
-		
-
-		printf("\nThe string you entered was: %s\n", input_string);
-
-		serialStartTimer = start_timer();
-	
-
-
-		thread1_active = 1;
-		thread2_active = 1;
-		thread3_active = 1;
-		thread4_active = 1;
-
-		thread1_found = 0;
-		thread2_found = 0;
-		thread3_found = 0;
-		thread4_found = 0;
-
-		pthread_t thread1,thread2,thread3,thread4;
-		pthread_create(&thread1, NULL , method1, &damon);
-		pthread_create(&thread2, NULL , method2, &damon);
-		pthread_create(&thread3, NULL , method3, &damon);
-		pthread_create(&thread4, NULL , method4, &damon);
-
-		int exit = 1;
-
-		do
-		{
-			if(thread1_active == 0 && thread2_active == 0 && thread3_active == 0 && thread4_active == 0)
-			{
-				exit = 0;
-			}
-			if(thread1_found)
-			{
-				exit = 0;
-			}
-			if(thread2_found)
-			{
-				exit = 0;
-			}
-			if(thread3_found)
-			{
-				exit = 0;
-			}
-			if(thread4_found)
-			{
-				exit = 0;
-			}
-
-			if(quit)
-			{
-				break;
-			}
-		
-			usleep(wait_Time);
-			serialCheckTimer = check_timer(serialStartTimer, "hi\n");
-		
-			if(serialCheckTimer > (60 * (minutes + 1)))
-			{
-				minutes++;			
-				printf("\nTime: %d minutes\n", minutes);
-				show1 = 1;
-				show2 = 1;
-				show3 = 1;
-				show4 = 1;
-			}
-		
-
-		}
-		while(exit);
-
-		if(quit)
-		{
-			personalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
-			personalOutputFile << "," << "Cancelled";
-			personalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
-			personalOutputFile.close();
-
-			totalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
-			totalOutputFile << "," << "Cancelled";
-			totalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
-			totalOutputFile.close();
-		}
-		else
-		{
-	
-			if(thread1_active)
-			{
-				pthread_cancel(thread1);
-			}
-			if(thread2_active)
-			{
-				pthread_cancel(thread2);
-			}
-			if(thread3_active)
-			{
-				pthread_cancel(thread3);
-			}
-			if(thread4_active)
-			{
-				pthread_cancel(thread4);
-			}
-	
-
-	
-
-			serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
-
-			personalOutputFile  <<  "," << serialStopTimer;
-			totalOutputFile  <<  "," << serialStopTimer;
-
-			float min = ((float) serialStopTimer)/(1000000*60);
-
-			personalOutputFile   <<  ","  << min;
-			totalOutputFile   <<  ","  << min;   
-
-			if(thread1_found == 0 && thread2_found == 0 && thread3_found == 0 && thread4_found == 0)
-			{
-				printf("Input could not be found.  Are you sure you entered valid input?\n");
-				printf("Character Alphabet for this version: ASCII 'a'-'z'\n");
-			}
-			else
-			{
-				personalOutputFile << "," << "Found";
-				totalOutputFile << "," << "Found";
-			}
-		
-			personalOutputFile << ","  << wait_Time  <<  endl;
-			totalOutputFile << ","  << wait_Time  <<  endl;
-		}
-
-		personalOutputFile.close();
-		totalOutputFile.close();
-		
-		printf("EXITING\n\n");
+		pthread_cancel(thread1);
 	}
+	if(thread2_active)
+	{
+		pthread_cancel(thread2);
+	}
+	if(thread3_active)
+	{
+		pthread_cancel(thread3);
+	}
+	if(thread4_active)
+	{
+		pthread_cancel(thread4);
+	}
+	
+
+	
+
+	long serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
+
+	if(thread1_found == 0 && thread2_found == 0 && thread3_found == 0 && thread4_found == 0)
+	{
+		printf("Input could not be found.  Are you sure you entered valid input?\n");
+		printf("Character Alphabet for this version: ASCII 'a'-'z'\n");
+	}
+	
+	printf("EXITING\n\n");
+
 }
 
 

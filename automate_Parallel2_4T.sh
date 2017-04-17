@@ -1,0 +1,19 @@
+#/bin/bash
+./Parallel2_4T a;
+./Parallel2_4T aa;
+./Parallel2_4T aaa;
+./Parallel2_4T aaaa;
+./Parallel2_4T aaaaa;
+./Parallel2_4T aaaaaa;
+./Parallel2_4T z;
+./Parallel2_4T zz;
+./Parallel2_4T zzz;
+./Parallel2_4T zzzz;
+./Parallel2_4T zzzzz;
+./Parallel2_4T zzzzzz;
+./Parallel2_4T p;
+./Parallel2_4T pp;
+./Parallel2_4T ppp;
+./Parallel2_4T pppp;
+./Parallel2_4T ppppp;
+./Parallel2_4T pppppp;
