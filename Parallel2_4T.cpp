@@ -575,7 +575,7 @@ int main( int argc, char ** argv)
 		totalOutputFile.close();
 		
 		printf("EXITING\n\n");
-		printf("hi\n");
+		
 	}
 }
 
