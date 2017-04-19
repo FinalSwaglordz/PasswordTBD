@@ -3,7 +3,7 @@ This file takes 1 string input, calculates the SHA1 hash, and outputs the result
 To Compile: g++ hash2file.cpp -lcrypto
 To Execute: ./a.out [STRING]
 	ex: ./a.out tom
-	
+
 Useful links: 	http://stackoverflow.com/questions/6934232/is-there-a-simple-c-or-c-function-that-calculates-the-sha1-hash-of-a-string
 		http://stackoverflow.com/questions/5040920/converting-from-signed-char-to-unsigned-char-and-back-again
 */
@@ -22,6 +22,12 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
+	if(argc !=2)
+	{
+		printf("Incorrect number of arguments. Argument list is <execname> <input_string>\n");
+		return 0;
+	}
+
 	FILE *file = fopen("temp_file.txt", "a+"); //open file to write to
 
 	int len = strlen(argv[1]);
