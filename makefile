@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-all: program1 program2 program3 program4 program5 program6
+all: program1 program2 program3 program4 program5 program6 program7
 
 program1:
 	mkdir -p -m 777 Executables
@@ -21,3 +21,6 @@ program5:
 
 program6:
 	g++ -pthread src/Parallel2_4T_OptimizeTest.cpp -o Executables/Parallel2_4T_OptimizeTest
+
+program7:
+	g++ hash2file.cpp -lcrypto -o Executables/hash2file
