@@ -46,7 +46,11 @@ void sigintHandler(int sig_num)
 	
 	printf("\nYou cancelled the search\n");
 	serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
-	cancel = 1;
+	personalOutputFile << "N/A,N/A,Cancelled,N/A" << endl;
+	totalOutputFile << "N/A,N/A,Cancelled,N/A" << endl;
+	personalOutputFile.close();
+	totalOutputFile.close();
+	exit(0);
 }
 
 int inc(char *c){
@@ -123,10 +127,10 @@ int main(int argc, char* argv[])
 			personalOutputFile  << min << ",";
 			totalOutputFile    << min << ",";
 
-			
+			found = 1;
 			
 		}
-		if(cancel)
+		if(found)
 		{
 			break;
 		}
@@ -135,19 +139,10 @@ int main(int argc, char* argv[])
     	} 
 	while(inc(c));
 	}
-	if(cancel)
-	{
-		personalOutputFile << "N/A,N/A,Cancelled,N/A" << endl;
-		totalOutputFile << "N/A,N/A,Cancelled,N/A" << endl;
-		personalOutputFile.close();
-		totalOutputFile.close();
-		
-	}
-	else
-	{
+	
 		
 
-		if(found)
+		if(!found)
 		{
 			printf("Input could not be found. Are you sure you entered valid input?\n");
 			printf("Character Alphabet for this version: ASCII 'a'-'z'\n");
@@ -164,8 +159,7 @@ int main(int argc, char* argv[])
 		personalOutputFile.close();
 		totalOutputFile.close();
 
-	}
-
+	
 
 		
 		
