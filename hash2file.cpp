@@ -1,3 +1,10 @@
+/*
+This file takes 1 string input, calculates the SHA1 hash, and outputs the result to the console and to a "temp_file.txt".
+To Compile: g++ hash2file.cpp -lcrypto
+To Execute: ./a.out [STRING]
+	ex: ./a.out tom
+*/
+
 #include <openssl/sha.h>
 #include <stdio.h>
 #include <iostream>
