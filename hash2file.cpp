@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
-	FILE *file = fopen("temp_file.txt", "w"); //open file to write to
+	FILE *file = fopen("temp_file.txt", "a+"); //open file to write to
 
 	int len = strlen(argv[1]);
 
@@ -32,11 +32,11 @@ int main(int argc, char ** argv)
 
 	fputs("String: ",file);
 	fputs(str, file); //output ret to file
-	fputs("\tHash: ",file);
+	fputs("\nHash: ",file);
 	fputs((char*)ret, file);
 	fputs("\n\n",file);
 
-	sleep(2);
+	//sleep(2);
 	//cin.get(); //wait for user input
 
 	return 0;
