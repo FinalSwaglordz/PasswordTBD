@@ -3,6 +3,9 @@ This file takes 1 string input, calculates the SHA1 hash, and outputs the result
 To Compile: g++ hash2file.cpp -lcrypto
 To Execute: ./a.out [STRING]
 	ex: ./a.out tom
+	
+Useful links: 	http://stackoverflow.com/questions/6934232/is-there-a-simple-c-or-c-function-that-calculates-the-sha1-hash-of-a-string
+		http://stackoverflow.com/questions/5040920/converting-from-signed-char-to-unsigned-char-and-back-again
 */
 
 #include <openssl/sha.h>
