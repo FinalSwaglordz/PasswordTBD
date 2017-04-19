@@ -99,7 +99,7 @@ void* second_thread(void*args)
 		*/
 		printf("2: Checking Length %i\n", i);		
 		c_second_thread[i-1] = 'n';
-		for( j=0; j< n-2; j++)
+		for( j=0; j< i-1; j++)
 		{
 			c_second_thread[j]='a';
 		}
@@ -250,7 +250,7 @@ int main( int argc, char ** argv)
 			exit = 0;
 		}
 		
-		usleep(50000);
+		usleep(10000);
 
 	}
 	while(exit);

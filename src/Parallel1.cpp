@@ -201,7 +201,7 @@ int main( int argc, char ** argv )
 			exit = 0;
 		}
 
-		usleep(50000);
+		usleep(10000);
 		
 	}
 	while(exit);

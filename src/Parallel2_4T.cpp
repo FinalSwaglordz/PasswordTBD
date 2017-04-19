@@ -414,7 +414,7 @@ int main( int argc, char ** argv)
 	}
 
 	mkdir("OutputFiles", ACCESSPERMS);
-	printf("Output Directory: OutputFiles\n");
+	printf("Output Directory: ../OutputFiles\n");
 
 	signal(SIGINT, sigintHandler);
 
@@ -436,7 +436,7 @@ int main( int argc, char ** argv)
 		damon.data = input_string;
 		damon.length = len;
 
-		personalOutputFile.open("OutputFiles/Parallel2_4T_Output.csv", std::ios_base::app);
+		personalOutputFile.open("OutputFiles/Parallel2_4T_Output.csv", ios::out |  std::ios_base::app);
 		totalOutputFile.open("OutputFiles/Final_Project_Total_Data.csv", std::ios_base::app);
 		
 		totalOutputFile << "Parallel2_4T,";
@@ -575,7 +575,6 @@ int main( int argc, char ** argv)
 		totalOutputFile.close();
 		
 		printf("EXITING\n\n");
-		
 	}
 }
 

@@ -13,8 +13,6 @@ using namespace std;
 #include <math.h>
 #include <iomanip>
 #include <signal.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
 int thread1_active;
 int thread2_active;
@@ -29,8 +27,10 @@ long serialStartTimer;
 long serialStopTimer;
 long serialCheckTimer;
 
-ofstream personalOutputFile;
-ofstream totalOutputFile;
+ofstream outputFile;
+
+
+
 
 int minutes = 0;
 int quit = 0;
@@ -40,7 +40,7 @@ int show2 = 0;
 int show3 = 0;
 int show4 = 0;
 
-int wait_Time = 999999;
+int wait_Time = 100000;
 
 struct damonArray
 {
@@ -48,8 +48,6 @@ struct damonArray
 	int length;
 
 };
-
-
 
 /*
 Timing methods
@@ -134,20 +132,19 @@ void* method1( void* args)
 		{
        			
 			//printf("1: %s\n",c_first_thread);
-			if(strcmp(input_string, c_first_thread) == 0)
+			if(memcmp(input_string, c_first_thread, n) == 0)
 			{
 				printf("Thread 1 has determined that you entered: %s\n", c_first_thread);
-				personalOutputFile << c_first_thread;
-				totalOutputFile << c_first_thread;
+				outputFile << c_first_thread;
 
-				thread1_found = 1;
+				thread1_found = 1;	
 				
 				free(c_first_thread);	
 							
 				return damon;	
 			}
 			
-			if(strcmp(c_first_thread, end) == 0)
+			if(memcmp(end, c_first_thread,i) == 0)
 			{
 								
 				break;
@@ -214,8 +211,7 @@ void* method2(void*args)
 			if(strcmp(input_string, c_second_thread) == 0)
 			{
 				printf("Thread 2 has determined that you entered: %s\n", c_second_thread);
-				personalOutputFile << c_second_thread;
-				totalOutputFile << c_second_thread;
+				outputFile << c_second_thread;
 
 
 				thread2_found = 1;	
@@ -290,8 +286,7 @@ void* method3(void*args)
 			if(strcmp(input_string, c_third_thread) == 0)
 			{
 				printf("Thread 3 has determined that you entered: %s\n", c_third_thread);
-				personalOutputFile << c_third_thread;
-				totalOutputFile << c_third_thread;
+				outputFile << c_third_thread;
 
 
 				thread3_found = 1;	
@@ -366,8 +361,7 @@ void* method4(void*args)
 			if(strcmp(input_string, c_fourth_thread) == 0)
 			{
 				printf("Thread 4 has determined that you entered: %s\n", c_fourth_thread);
-				personalOutputFile << c_fourth_thread;
-				totalOutputFile << c_fourth_thread;
+				outputFile << c_fourth_thread;
 
 				thread4_found = 1;	
 				
@@ -413,8 +407,6 @@ int main( int argc, char ** argv)
 
 	}
 
-	mkdir("OutputFiles", ACCESSPERMS);
-	printf("Output Directory: OutputFiles\n");
 
 	signal(SIGINT, sigintHandler);
 
@@ -436,11 +428,7 @@ int main( int argc, char ** argv)
 		damon.data = input_string;
 		damon.length = len;
 
-		personalOutputFile.open("OutputFiles/Parallel2_4T_Output.csv", std::ios_base::app);
-		totalOutputFile.open("OutputFiles/Final_Project_Total_Data.csv", std::ios_base::app);
-		
-		totalOutputFile << "Parallel2_4T,";
-		
+		outputFile.open("Parallel2_4T_Optimize_Output.csv", std::ios_base::app);
 
 		printf("\nThe string you entered was: %s\n", input_string);
 
@@ -513,15 +501,10 @@ int main( int argc, char ** argv)
 
 		if(quit)
 		{
-			personalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
-			personalOutputFile << "," << "Cancelled";
-			personalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
-			personalOutputFile.close();
-
-			totalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
-			totalOutputFile << "," << "Cancelled";
-			totalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
-			totalOutputFile.close();
+			outputFile << input_string << "," << "N/A" << "," << "N/A";	
+			outputFile << "," << "Cancelled";
+			outputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
+			outputFile.close();
 		}
 		else
 		{
@@ -548,13 +531,11 @@ int main( int argc, char ** argv)
 
 			serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
 
-			personalOutputFile  <<  "," << serialStopTimer;
-			totalOutputFile  <<  "," << serialStopTimer;
+			outputFile  <<  "," << serialStopTimer;
 
 			float min = ((float) serialStopTimer)/(1000000*60);
 
-			personalOutputFile   <<  ","  << min;
-			totalOutputFile   <<  ","  << min;   
+			outputFile   <<  ","  << min;  
 
 			if(thread1_found == 0 && thread2_found == 0 && thread3_found == 0 && thread4_found == 0)
 			{
@@ -563,19 +544,14 @@ int main( int argc, char ** argv)
 			}
 			else
 			{
-				personalOutputFile << "," << "Found";
-				totalOutputFile << "," << "Found";
+				outputFile << "," << "Found";
 			}
 		
-			personalOutputFile << ","  << wait_Time  <<  endl;
-			totalOutputFile << ","  << wait_Time  <<  endl;
+			outputFile << ","  << wait_Time  <<  endl;
 		}
 
-		personalOutputFile.close();
-		totalOutputFile.close();
-		
+		outputFile.close();
 		printf("EXITING\n\n");
-		
 	}
 }
 
