@@ -40,7 +40,7 @@ int show2 = 0;
 int show3 = 0;
 int show4 = 0;
 
-int wait_Time = 999999;
+int wait_Time = 100000;
 
 struct damonArray
 {

@@ -17,3 +17,7 @@
 ./Executables/Serial pppp;
 ./Executables/Serial ppppp;
 ./Executables/Serial pppppp;
+./Executables/Serial bbbbbb;
+./Executables/Serial yyyyyy;
+./Executables/Serial xxxxxx;
+./Executables/Serial aaaaaaa;
