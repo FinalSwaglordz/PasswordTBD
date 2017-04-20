@@ -17,3 +17,7 @@
 ./Executables/Parallel2_4T pppp;
 ./Executables/Parallel2_4T ppppp;
 ./Executables/Parallel2_4T pppppp;
+./Executables/Parallel2_4T bbbbbb;
+./Executables/Parallel2_4T yyyyyy;
+./Executables/Parallel2_4T xxxxxx;
+./Executables/Parallel2_4T aaaaaaa;
