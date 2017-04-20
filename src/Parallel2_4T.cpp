@@ -468,6 +468,8 @@ int main( int argc, char ** argv)
 
 		do
 		{
+			
+			usleep(wait_Time);
 			if(thread1_active == 0 && thread2_active == 0 && thread3_active == 0 && thread4_active == 0)
 			{
 				exit = 0;
@@ -494,7 +496,7 @@ int main( int argc, char ** argv)
 				break;
 			}
 		
-			usleep(wait_Time);
+			
 			serialCheckTimer = check_timer(serialStartTimer, "hi\n");
 		
 			if(serialCheckTimer > (60 * (minutes + 1)))
