@@ -43,17 +43,28 @@ int main(int argc, char ** argv)
 	unsigned char hash[20];
 	unsigned char* ret;
 
-	ret = SHA1(u_str, sizeof(u_str)-1, hash);
-	cout<< "Hash: " << ret << "-END\n"; //this is the calculated SHA1 hash
+	//ret = SHA1(u_str, sizeof(u_str)-1, hash);
+	SHA1(u_str, sizeof(u_str)-1, hash);
 
 	fputs("String: ",file);
 	fputs(str, file); //output ret to file
 	fputs("\nHash: ",file);
-	fputs((char*)ret, file);
+
+	char tempc;
+	for(int i=0; i<20; i++)
+	{
+		//tempc = hash[i];
+		cout << hex << (int)hash[i];
+		//cout << tempc;
+		//fputs(hash[i], file);
+	}
+
+	cout << "\n\n";
+	//fputs((char*)ret, file);
 	fputs("\n\n",file);
 
 	//sleep(2);
-	//cin.get(); //wait for user input
+	//cin.get();
 
 	return 0;
 }
