@@ -49,8 +49,6 @@ struct damonArray
 
 };
 
-
-
 /*
 Timing methods
 */
@@ -579,22 +577,6 @@ int main( int argc, char ** argv)
 		printf("EXITING\n\n");
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
