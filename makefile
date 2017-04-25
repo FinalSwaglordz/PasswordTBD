@@ -26,7 +26,7 @@ program7:
 	g++ -pthread src/Alphabet_Switch.cpp -o Executables/Alphabet_Switch
 
 program8:
-	g++ -pthread src/Parallel_Variable2.cpp -o Executables/Parallel_Variable2
+	g++ -pthread src/Parallel_Variable2.cpp -w -o Executables/Parallel_Variable2
 
 program9:
 	g++ hash2file.cpp -lcrypto -o Executables/hash2file

@@ -17,6 +17,13 @@ using namespace std;
 
 int found[26];
 
+long serialStartTimer;
+long serialStopTimer;
+long serialCheckTimer;
+
+int minutes = 0;
+int quit = 0;
+
 struct threadData
 {
 	char * data;
@@ -25,6 +32,29 @@ struct threadData
 	char last_letter;
 	int threadNum;
 };
+
+long long start_timer() {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return tv.tv_sec * 1000000 + tv.tv_usec;
+}
+
+long long stop_timer(long long start_time, std::string name) {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	long long end_time = tv.tv_sec * 1000000 + tv.tv_usec;
+        std::cout << std::setprecision(7);	
+	std::cout << name << ": " << ((float) (end_time - start_time)) / (1000 * 1000) << " sec\n";
+	return end_time - start_time;
+}
+
+void sigintHandler(int sig_num)
+{
+	
+	printf("\nYou cancelled the search\n");
+	serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
+	quit = 1;
+}
 
 int inc(char *c)
 {
@@ -120,6 +150,8 @@ int main( int argc, char ** argv)
 	int baselettersperthread = alphabet/threads;
 	int extraletters =  alphabet % threads;
 	
+	signal(SIGINT, sigintHandler);
+	
 	for(int i = 0; i < threads; i++)
 	{
 		found[i] = 0;
@@ -178,7 +210,7 @@ int main( int argc, char ** argv)
 			
 		
 		threadDataArray[i] = {input_string, len, first_letter, last_letter, i};
-		printf("Thread :%d, Input_string: %s, First: %c, Last: %c\n", i, input_string, first_letter, last_letter);
+		printf("Thread %d:, Input_string: %s, First: %c, Last: %c\n", i, input_string, first_letter, last_letter);
 	}
 	
 	pthread_t threadList[threads];
@@ -200,6 +232,11 @@ int main( int argc, char ** argv)
 				exit = 0;
 			}
 		}
+		
+		if(quit)
+		{
+			break;
+		}
 	
 	
 	}
@@ -212,6 +249,16 @@ int main( int argc, char ** argv)
 	{
 		printf("found%d: %d\n", i, found[i]);
 	}
+	
+	if(quit)
+	{
+	
+	}
+	else
+	{
+	
+	}
+	
 	
 	
 }
