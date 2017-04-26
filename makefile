@@ -29,6 +29,6 @@ program8:
 	g++ -pthread src/Parallel_Variable2.cpp -w -o Executables/Parallel_Variable2
 
 program9:
-	g++ hash2file.cpp -lcrypto -o Executables/hash2file
+	g++ sha1_2.cpp -lcrypto -o Executables/sha1
 	
 
