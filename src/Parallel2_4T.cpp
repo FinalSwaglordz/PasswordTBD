@@ -521,12 +521,12 @@ int main( int argc, char ** argv)
 		{
 			personalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
 			personalOutputFile << "," << "Cancelled";
-			personalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
+			personalOutputFile <<  "," << "N/A" << endl;
 			personalOutputFile.close();
 
 			totalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
 			totalOutputFile << "," << "Cancelled";
-			totalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
+			totalOutputFile << "," << "N/A" << endl;
 			totalOutputFile.close();
 		}
 		else
