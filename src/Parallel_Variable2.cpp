@@ -21,8 +21,13 @@ long serialStartTimer;
 long serialStopTimer;
 long serialCheckTimer;
 
+ofstream personalOutputFile;
+ofstream totalOutputFile;
+
 int minutes = 0;
 int quit = 0;
+
+int wait_Time = 100000;
 
 struct threadData
 {
@@ -111,6 +116,9 @@ void* method (void *args)
 			{
 				printf("You entered: %s\n", c);
 			
+				personalOutputFile << c;
+				totalOutputFile << c;
+			
 				found[threadNum] = 1;
 			
 				return methodData;
@@ -150,14 +158,23 @@ int main( int argc, char ** argv)
 	int baselettersperthread = alphabet/threads;
 	int extraletters =  alphabet % threads;
 	
+	mkdir("OutputFiles", ACCESSPERMS);
+	printf("Output Directory: ../OutputFiles\n");
+	
 	signal(SIGINT, sigintHandler);
+	
+	personalOutputFile.open("OutputFiles/Parallel_Variable2_Output.csv", ios::out |  std::ios_base::app);
+	totalOutputFile.open("OutputFiles/Final_Project_Total_Data.csv", std::ios_base::app);
+		
+	totalOutputFile << "Parallel_Variable2,";
+	personalOutputFile << "Parallel_Variable2,";
 	
 	for(int i = 0; i < threads; i++)
 	{
 		found[i] = 0;
 	}
 	
-	if(len > 9)
+	if(len > 20)
 	{
 		printf("I'm assuming you made a mistake.\n");
 		printf("String is pretty long, better change programs to look for that one.\n\n");
@@ -190,8 +207,16 @@ int main( int argc, char ** argv)
 	
 	strcpy(input_string,argv[1]);
 	
+	totalOutputFile << input_string << ",";
+	personalOutputFile << input_string << ",";
+	
+	totalOutputFile << threads << ",";
+	personalOutputFile << threads << ",";
+	
 
 	printf("\nThe string you entered was: %s\n", input_string);
+	
+	serialStartTimer = start_timer();
 	
 	char input = 'a';
 	char first_letter;
@@ -210,7 +235,7 @@ int main( int argc, char ** argv)
 			
 		
 		threadDataArray[i] = {input_string, len, first_letter, last_letter, i};
-		printf("Thread %d:, Input_string: %s, First: %c, Last: %c\n", i, input_string, first_letter, last_letter);
+		printf("Thread %d: Input_string: %s, First: %c, Last: %c\n", i, input_string, first_letter, last_letter);
 	}
 	
 	pthread_t threadList[threads];
@@ -225,6 +250,7 @@ int main( int argc, char ** argv)
 	int exit = 1;
 	do
 	{
+		usleep(wait_Time);
 		for(int i = 0; i < threads; i++)
 		{
 			if(found[i] == 1)
@@ -243,7 +269,7 @@ int main( int argc, char ** argv)
 	while(exit);
 	
 	
-	printf("Im out\n");
+	//printf("Im out\n");
 	
 	for(int i = 0; i < threads; i++)
 	{
@@ -252,14 +278,38 @@ int main( int argc, char ** argv)
 	
 	if(quit)
 	{
-	
+		personalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
+		personalOutputFile << "," << "Cancelled";
+		personalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
+		personalOutputFile.close();
+
+		totalOutputFile << input_string << "," << "N/A" << "," << "N/A";	
+		totalOutputFile << "," << "Cancelled";
+		totalOutputFile << "," <<"Wait Time: " << "," << "N/A" << endl;
+		totalOutputFile.close();
 	}
 	else
 	{
-	
+		serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
+		personalOutputFile  <<  "," << serialStopTimer;
+		totalOutputFile  <<  "," << serialStopTimer;
+
+		float min = ((float) serialStopTimer)/(1000000*60);
+
+		personalOutputFile   <<  ","  << min;
+		totalOutputFile   <<  ","  << min;
+		
+		personalOutputFile << "," << "Found";
+		totalOutputFile << "," << "Found";
 	}
 	
+	personalOutputFile << ","  << wait_Time  <<  endl;
+	totalOutputFile << ","  << wait_Time  <<  endl;
 	
+	personalOutputFile.close();
+	totalOutputFile.close();
+	
+	printf("EXITING\n\n");
 	
 }
 
