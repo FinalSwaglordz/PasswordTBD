@@ -1,7 +1,6 @@
 #include <pthread.h>
 #include <iostream>
 #include <fstream>
-using namespace std;
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
@@ -14,6 +13,8 @@ using namespace std;
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+using namespace std;
 
 int found[26];
 
