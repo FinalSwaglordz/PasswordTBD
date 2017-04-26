@@ -89,9 +89,10 @@ int main(int argc, char* argv[])
 	totalOutputFile.open("OutputFiles/Final_Project_Total_Data.csv", std::ios_base::app);
 
 	totalOutputFile << "Serial,";
+	personalOutputFile << "Serial,";
 
-	personalOutputFile << input_string << ",";
-	totalOutputFile << input_string << ",";
+	personalOutputFile << input_string << ",1,";
+	totalOutputFile << input_string << ",1,";
 
     	int n = len;
    	 int i,j;
@@ -119,6 +120,9 @@ int main(int argc, char* argv[])
 
 			serialStopTimer = stop_timer(serialStartTimer, "Serial run time: ");
 
+			personalOutputFile << c << ",";
+			totalOutputFile << c << ",";		
+			
 			personalOutputFile << serialStopTimer << ",";
 			totalOutputFile << serialStopTimer << ",";
 

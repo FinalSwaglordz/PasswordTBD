@@ -438,6 +438,12 @@ int main( int argc, char ** argv)
 		totalOutputFile.open("OutputFiles/Final_Project_Total_Data.csv", std::ios_base::app);
 		
 		totalOutputFile << "Parallel2_4T,";
+		personalOutputFile << "Parallel2_4T,";
+		
+		totalOutputFile << input_string << ",4,";
+		personalOutputFile << input_string << ",4,";
+		
+		
 		
 
 		printf("\nThe string you entered was: %s\n", input_string);
