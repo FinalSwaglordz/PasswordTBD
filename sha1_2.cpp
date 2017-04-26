@@ -8,6 +8,7 @@ Useful links:	https://memset.wordpress.com/2010/10/06/using-sha1-function/
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <openssl/sha.h>
 
@@ -17,11 +18,15 @@ char* hash_function(char* input_string)
 {
 	int i = 0;
 	unsigned char temp[SHA_DIGEST_LENGTH]; //where we will store the SHA digest. length = 20
-	char buf[SHA_DIGEST_LENGTH*2];
-
+	char *buf = (char *)malloc(SHA_DIGEST_LENGTH*2); //dont need (char *) if C. do need for C++
+	if(buf == NULL)
+	{
+		return NULL;
+	}
+	
 	memset(temp, 0x0, SHA_DIGEST_LENGTH);  //array of size 20 to store SHA1 digest
 	memset(buf, 0x0, SHA_DIGEST_LENGTH*2); //array of size 2*20 to store hex result?
-
+	
 	SHA1((unsigned char *)input_string, strlen(input_string), temp);
 	
 	for(i=0; i<SHA_DIGEST_LENGTH; i++){
@@ -30,7 +35,7 @@ char* hash_function(char* input_string)
 	}
 	
 	//printf("In FUNCTION: %s\n", buf);
-	return (char *)&buf;
+	return buf;
 }
 
 int main(int argc, char * argv[])
@@ -48,5 +53,6 @@ int main(int argc, char * argv[])
 	//FILE *file = fopen("temp_file.txt", "a+"); //open file to write to
 	//fprintf(file, "Plaintext: %s\nSHA-1: %s\n\n", argv[1], buf);
 
+	free(hash);
 	return 0;
 }
