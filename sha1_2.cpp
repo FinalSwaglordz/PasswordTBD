@@ -1,6 +1,6 @@
 /*
 This file takes 1 string input, calculates the SHA1 hash, and outputs the result to the console and to a "temp_file.txt".
-To Compile: gcc sha1.cpp -lcrypto -o sha
+To Compile: gcc sha1_2.cpp -lcrypto -o sha
 To Execute: ./sha [STRING]
 	ex: ./sha tom
 
