@@ -7,5 +7,7 @@ This project reads user input, creates strings of length 1 up to n (which is max
 
 The idea is that this can be changed to accept an SHA-1 hash and will brute-force calculate the string which creates that hash. <br>
 
-To compile: c++ VariableLengthSolution1.cpp -o test <br>
-To execute: ./test <br>
+To compile just type: make<br>
+This will compile all of our files and make them executable<br>
+There will actually be an Executables folder created for the user<br>
+To execute go in to Executables folder and type: ./fileName <br>
