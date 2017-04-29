@@ -32,4 +32,4 @@ program9:
 	g++ sha1_2.cpp -lcrypto -o Executables/sha1
 	
 program10:
-	g++ Hash_Source.cpp -w -lcrypto -o Executables/hash
+	g++ src/Hash_Source.cpp -w  -pthread -lcrypto -o Executables/hash
