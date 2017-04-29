@@ -11,3 +11,5 @@ To compile just type: make<br>
 This will compile all of our files and make them executable<br>
 There will actually be an Executables folder created for the user<br>
 To execute go in to Executables folder and type: ./fileName <br>
+
+SHA-1 Calculator: http://sha1-hash-online.waraxe.us/
