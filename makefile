@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-all: program1 program2 program3 program4 program5 program6 program7 program8 program9
+all: program1 program2 program3 program4 program5 program6 program7 program8 program9 program10
 
 program1:
 	mkdir -p -m 777 Executables
@@ -30,3 +30,6 @@ program8:
 
 program9:
 	g++ src/Hash_Source.cpp -w  -pthread -lcrypto -o Executables/hash
+	
+program10:
+	g++ -pthread src/Parallel_Variable2_LargeSet.cpp -w -o Executables/Parallel_Variable2_LargeSet
