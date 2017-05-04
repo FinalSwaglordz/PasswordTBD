@@ -1,3 +1,3 @@
-#/bin/bash
-./automate_Parallel2_4T.sh
+#!/bin/bash
 ./automate_Serial.sh
+./automate_Parallel_Variable2.sh

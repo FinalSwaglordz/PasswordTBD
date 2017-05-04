@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 ./Executables/Parallel_Variable2 a 1;
 ./Executables/Parallel_Variable2 aa 1;
 ./Executables/Parallel_Variable2 aaa 1;
