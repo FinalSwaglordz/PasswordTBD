@@ -1,0 +1,13 @@
+#!/bin/bash
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 1;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 2;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 3;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 4;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 5;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 6;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 7;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 8;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 9;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 10;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 16;
+./Executables/hash a2b7caddbc353bd7d7ace2067b8c4e34db2097a3 26;
