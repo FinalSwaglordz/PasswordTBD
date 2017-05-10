@@ -327,6 +327,8 @@ int main( int argc, char ** argv)
 	
 	//printf("Im out\n");
 	
+	serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
+	
 	for(int i = 0; i < threads; i++)
 	{
 		printf("Thread %d found: %d\n", i, found[i]);
@@ -346,7 +348,7 @@ int main( int argc, char ** argv)
 	}
 	else
 	{
-		serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
+		//serialStopTimer = stop_timer(serialStartTimer, "Run time: ");
 		personalOutputFile  <<  "," << serialStopTimer;
 		totalOutputFile  <<  "," << serialStopTimer;
 
